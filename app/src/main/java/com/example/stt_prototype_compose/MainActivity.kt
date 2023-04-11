@@ -9,6 +9,8 @@ import android.speech.SpeechRecognizer
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,9 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.example.stt_prototype_compose.ui.theme.STT_prototype_composeTheme
 import java.util.*
 
+
 class MainActivity : ComponentActivity() {
     // 결과물이 보여질 곳
-    var outputTxt by mutableStateOf("")
+    private var outputTxt by mutableStateOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,19 +148,18 @@ class MainActivity : ComponentActivity() {
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "말해보세요!")
 
             // 설정이 완료되었다면 음성을 받아서 후처리
-            startActivityForResult(intent, 101)
+            startForResult.launch(intent)
         }
     }
 
     // 결과값 저장을 위한 함수 (startActivityForResult에 대한 결과 처리를 위한 함수)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // 정상적으로 요청이 들어왔다면
-        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
-            // 결과값 추출
-            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            // outputTxt에 결과값 저장
-            outputTxt = result?.get(0).toString()
-        }
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        activityResult: ActivityResult ->
+            if (activityResult.resultCode == Activity.RESULT_OK) {
+                // 문자열 데이터만 추출
+                val result = activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                // outputTxt에 결과값 저장
+                outputTxt = result?.get(0).toString()
+            }
     }
 }
