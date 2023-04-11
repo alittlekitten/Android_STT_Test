@@ -23,8 +23,6 @@ fun SpeechToText(outputTxt: String, getSpeechInput: (context: Context) -> Unit) 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // on the below line we are creating a simple
-        // text for displaying the heading.
         Text(
             text = "SpeechRecognizer 테스트",
             style = MaterialTheme.typography.h6,
