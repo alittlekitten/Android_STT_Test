@@ -1,6 +1,5 @@
 package com.example.stt_prototype_compose
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -40,7 +39,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable
     fun SttScreen() {
         Surface(
@@ -48,28 +46,22 @@ class MainActivity : ComponentActivity() {
             color = MaterialTheme.colors.background
         ) {
             Scaffold(
-                // on below line we are
-                // specifying top bar as our action bar.
                 topBar = {
                     TopAppBar(
-                        // on below line we are specifying title
-                        // for our action bar as Speech to Text
                         title = {
                             Text(
                                 text = "Android STT 프로토타입",
-
-                                // on below line we are specifying
-                                // width of our text
                                 modifier = Modifier.fillMaxWidth(),
-
-                                // on below line we are specifying
-                                // the text alignment for our text
                                 textAlign = TextAlign.Center
                             )
                         })
                 }) {
                 // STT를 위한 컴포저블 소환
-                SpeechToText()
+                Box(
+                    modifier = Modifier.padding(it)
+                ) {
+                    SpeechToText()
+                }
             }
         }
     }
